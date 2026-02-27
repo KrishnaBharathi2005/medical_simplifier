@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Medical Intelligence</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin:0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg,#0f172a,#1e3a8a);
+            color:white;
+        }
+
+        .navbar {
+            display:flex;
+            justify-content:space-between;
+            padding:20px 40px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar a {
+            color:white;
+            text-decoration:none;
+            margin-left:20px;
+        }
+
+        .container {
+            padding:40px;
+        }
+
+        .glass-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+            padding:30px;
+            border-radius:20px;
+            box-shadow:0 8px 32px rgba(0,0,0,0.3);
+            margin-bottom:30px;
+        }
+
+        .grid {
+            display:grid;
+            gap:30px;
+        }
+
+        .grid-2 {
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        }
+
+        .btn {
+            padding:12px 20px;
+            background:#2563eb;
+            border:none;
+            border-radius:10px;
+            color:white;
+            cursor:pointer;
+        }
+
+        .btn:hover {
+            background:#1e40af;
+        }
+
+        .dark-toggle {
+            cursor:pointer;
+        }
+
+        .dark-mode {
+            background: linear-gradient(135deg,#000000,#111827);
+        }
+    </style>
+</head>
+
+<body id="body">
+
+<div class="navbar">
+    <div><strong>AI Medical Intelligence</strong></div>
+    <div>
+        <a href="{{ url_for('home') }}">Upload</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('compare') }}">Compare</a>
+        <a onclick="toggleDark()" class="dark-toggle">Dark Mode</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+
+<script>
+function toggleDark(){
+    document.getElementById("body").classList.toggle("dark-mode");
+}
+</script>
+
+</body>
+</html>

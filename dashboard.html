@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Welcome, {{ session.get("username") }}</h1>
+
+<div class="grid grid-2">
+
+<div class="glass-card">
+<h2 id="totalReports">0</h2>
+<p>Total Reports</p>
+</div>
+
+<div class="glass-card">
+<h2 id="avgRisk">0</h2>
+<p>Average Risk Score</p>
+</div>
+
+</div>
+
+<div class="glass-card">
+<canvas id="riskChart"></canvas>
+</div>
+
+<script>
+const reports = {{ reports|tojson }};
+let total = reports.length;
+let totalScore = 0;
+let labels = [];
+let scores = [];
+
+reports.forEach(r => {
+    totalScore += r[4];
+    labels.push(r[6]);
+    scores.push(r[4]);
+});
+
+let avg = total > 0 ? (totalScore / total).toFixed(1) : 0;
+
+animate("totalReports", total);
+animate("avgRisk", avg);
+
+function animate(id, value){
+    let count = 0;
+    let increment = value/40;
+    let interval = setInterval(()=>{
+        count += increment;
+        if(count >= value){
+            document.getElementById(id).innerText=value;
+            clearInterval(interval);
+        } else {
+            document.getElementById(id).innerText=Math.floor(count);
+        }
+    },30);
+}
+
+new Chart(document.getElementById("riskChart"), {
+    type:"line",
+    data:{
+        labels:labels,
+        datasets:[{
+            label:"Risk Score Over Time",
+            data:scores,
+            borderColor:"#00e0ff",
+            backgroundColor:"rgba(0,224,255,0.2)",
+            fill:true,
+            tension:0.4
+        }]
+    }
+});
+</script>
+{% endblock %}

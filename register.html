@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register | AI Medical Intelligence</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+        }
+
+        .register-container {
+            width: 380px;
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            color: white;
+        }
+
+        .register-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .register-btn:hover {
+            background: #1e40af;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #00e0ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: rgba(255, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .password-rules {
+            font-size: 12px;
+            margin-top: 10px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        @media(max-width: 420px) {
+            .register-container {
+                width: 90%;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <h2>Create Account</h2>
+
+    {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+
+        <div class="input-group">
+            <label>Username</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <button type="submit" class="register-btn">Register</button>
+
+    </form>
+
+    <div class="password-rules">
+        Password must contain:
+        <br>• Minimum 8 characters
+        <br>• At least 1 uppercase letter
+        <br>• At least 1 lowercase letter
+        <br>• At least 1 number
+        <br>• At least 1 special character
+    </div>
+
+    <div class="login-link">
+        Already have an account? 
+        <a href="{{ url_for('login') }}">Login here</a>
+    </div>
+
+</div>
+
+</body>
+</html>
