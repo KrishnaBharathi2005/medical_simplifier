@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Medical Report Simplifier</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #e8f0ff, #f5f9ff);
+    margin: 0;
+    padding: 40px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #1f2937;
+}
+
+.header p {
+    color: #6b7280;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.upload-box {
+    text-align: center;
+}
+
+.upload-box input {
+    margin-right: 10px;
+}
+
+button {
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, #2563eb, #1e3a8a);
+    color: white;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.output-box {
+    background: #f9fbff;
+    padding: 20px;
+    border-radius: 12px;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    border-left: 6px solid #2563eb;
+}
+
+.section-title {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Circular Gauge */
+
+.gauge-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.gauge {
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.gauge svg {
+    transform: rotate(-90deg);
+}
+
+.gauge text {
+    font-size: 5px;
+    fill: #1f2937;
+    transform: rotate(90deg);
+    transform-origin: center;
+}
+
+.risk-low { color: #16a34a; }
+.risk-moderate { color: #f59e0b; }
+.risk-high { color: #dc2626; }
+
+.download-btn {
+    margin-top: 20px;
+    background: #111827;
+    color: white;
+}
+
+.download-btn:hover {
+    background: #374151;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+@media(max-width:768px){
+    body { padding: 20px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+    <h1>AI Medical Report Simplifier</h1>
+    <p>Advanced AI-powered clinical document analysis system</p>
+</div>
+
+<div class="card upload-box">
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="pdf_file" accept=".pdf" required>
+        <button type="submit" class="primary-btn">Upload Report</button>
+    </form>
+</div>
+
+{% if simplified %}
+
+<div class="card">
+    <div class="section-title">Structured Medical Summary</div>
+    <div class="output-box">{{ simplified }}</div>
+</div>
+
+<div class="card">
+    <div class="card-title">AI Rewritten Clinical Explanation</div>
+    <div class="output-box" style="white-space: pre-line;">
+        {{ ai_rewrite }}
+    </div>
+</div>
+
+
+    <div class="gauge-wrapper">
+        <div class="gauge">
+            <svg viewBox="0 0 36 36">
+                <path d="M18 2 a 16 16 0 1 1 0 32 a 16 16 0 1 1 0 -32"
+                      fill="none"
+                      stroke="#e5e7eb"
+                      stroke-width="3"/>
+                <path d="M18 2 a 16 16 0 1 1 0 32"
+                      fill="none"
+                      stroke="{% if risk == 'LOW' %}#16a34a{% elif risk == 'MODERATE' %}#f59e0b{% else %}#dc2626{% endif %}"
+                      stroke-width="3"
+                      stroke-dasharray="{{ risk_score * 10 }}, 100"
+                      stroke-linecap="round"/>
+                <text x="18" y="20.5" text-anchor="middle">
+                    {{ risk }}
+                </text>
+            </svg>
+        </div>
+    </div>
+    <div style="text-align:center; margin-top:15px;"
+         class="{% if risk == 'LOW' %}risk-low{% elif risk == 'MODERATE' %}risk-moderate{% else %}risk-high{% endif %}">
+        Overall Risk Level: {{ risk }}
+    </div>
+
+    <div style="text-align:center;">
+        <a href="{{ url_for('download', report_id=report_id) }}">
+            <button class="download-btn">Download Medical Analysis Report</button>
+        </a>
+    </div>
+
+</div>
+
+{% endif %}
+
+{% if text %}
+<div class="card">
+    <div class="section-title">Raw Extracted Medical Text</div>
+    <div class="output-box">{{ text }}</div>
+</div>
+{% endif %}
+
+<div class="footer">
+    AI Medical Intelligence System • Industry Demo Version
+</div>
+
+</div>
+
+</body>
+</html>

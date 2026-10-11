@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
+    <h2 class="card-title">Multi-Report Risk Comparison</h2>
+
+    {% if data and data|length > 0 %}
+
+        <canvas id="riskChart" height="100"></canvas>
+
+        <!-- Safely pass data from Flask to JS -->
+        <script>
+            const reportData = {{ data | tojson | safe }};
+
+            const labels = reportData.map(function(item) {
+                return item[1];   // created_at
+            });
+
+            const scores = reportData.map(function(item) {
+                return item[0];   // risk_score
+            });
+
+            const ctx = document.getElementById('riskChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Risk Score Over Time',
+                        data: scores,
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37,99,235,0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 10
+                        }
+                    }
+                }
+            });
+        </script>
+
+    {% else %}
+        <p>No reports available for comparison yet.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
